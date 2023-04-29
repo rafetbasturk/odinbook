@@ -8,6 +8,11 @@ const UserPageWrapper = styled.main`
   background: var(--tint-100);
   border-radius: var(--size-xxs);
 
+  img {
+    width: 100px;
+    height: 100px;
+  }
+
   @media (min-width: 900px) {
     margin-top: 5rem;
   }

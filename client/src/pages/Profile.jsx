@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useUserContext from "../hooks/useUserContext";
-import { InputElement, Loading } from "../components";
+import { InputElement, Loading, ProfileImage } from "../components";
 import { UserPageWrapper } from "../assets/wrappers";
 
 const Profile = () => {
@@ -23,7 +23,7 @@ const Profile = () => {
     <UserPageWrapper>
       <h2>Profile</h2>
       {userLoading && <Loading />}
-      {!userLoading && <img src={currentUser.image} alt="" style={{ width: 100, height: 100 }} />}
+      {!userLoading && <ProfileImage image={currentUser?.image} alt={currentUser.name} />}
       <div>{currentUser?.email}</div>
       <form onSubmit={handleUpload}>
         <input type="file" name="image" id="image" onChange={handleChange} accept="image/*" />
