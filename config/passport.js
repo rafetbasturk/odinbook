@@ -15,7 +15,7 @@ passport.use(
   new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "/api/v1/auth/facebook/callback",
+    callbackURL: "https://rafet-odinbook.onrender.com/api/v1/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'name', 'gender', 'picture.type(large)', 'email'],
   }, async (accessToken, refreshToken, profile, cb) => {
     const { id, name, email, picture } = profile._json

@@ -63,7 +63,7 @@ exports.logout = (req, res) => {
 
 exports.callback = async (req, res) => {
   const user = req.user;
-  const token = user.createJWT()
-  attachCookies({ res, token })
+  const token = user.createJWT();
+  attachCookies({ res, token });
   res.redirect("/");
 }
