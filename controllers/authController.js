@@ -65,5 +65,5 @@ exports.callback = async (req, res) => {
   const user = req.user;
   const token = user.createJWT()
   attachCookies({ res, token })
-  res.redirect("http://localhost:5000");
+  res.redirect("https://rafet-odinbook.onrender.com/");
 }
