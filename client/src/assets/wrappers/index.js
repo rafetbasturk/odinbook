@@ -8,6 +8,7 @@ import SearchWrapper from "./SearchWrapper"
 import IconWrapper from "./IconWrapper"
 import NavWrapper from "./NavWrapper"
 import UserPageWrapper from "./UserPageWrapper"
+import ProfileWrapper from "./ProfileWrapper"
 
 export {
   HeaderWrapper,
@@ -19,5 +20,6 @@ export {
   SearchWrapper,
   IconWrapper,
   NavWrapper,
+  ProfileWrapper,
   UserPageWrapper,
 }

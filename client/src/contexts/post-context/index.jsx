@@ -1,6 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react/prop-types */
 import { createContext, useEffect, useReducer } from "react"
 import { postReducer } from "./reducer"
 import apiFetch from "../../config/axiosConfig"
+import useAlertContext from "../../hooks/useAlertContext"
 
 import {
   GET_POSTS_BEGIN,
@@ -29,7 +32,7 @@ import {
   EDIT_COMMENT_ERROR,
 } from "./actions";
 
-const PostContext = createContext()
+const PostContext = createContext();
 
 const initialState = {
   isLoading: false,
@@ -52,6 +55,7 @@ const initialState = {
 
 const PostProvider = ({ children }) => {
   const [state, dispatch] = useReducer(postReducer, initialState)
+  const { showAlert } = useAlertContext()
 
   const setCommentEditMode = async (postId, commentId) => {
     try {
@@ -72,11 +76,10 @@ const PostProvider = ({ children }) => {
       const url = `comments/${state.comment._id}`
       const { data: { comment } } = await apiFetch.patch(url, content)
       dispatch({ type: EDIT_COMMENT_SUCCESS, payload: { postId, comment } })
+      showAlert("success", "Comment edited.")
     } catch (error) {
-      dispatch({
-        type: EDIT_COMMENT_ERROR,
-        payload: { msg: error.response.data.msg }
-      })
+      dispatch({ type: EDIT_COMMENT_ERROR })
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -85,13 +88,10 @@ const PostProvider = ({ children }) => {
     try {
       await apiFetch.delete(`comments/${commentId}`)
       dispatch({ type: DELETE_COMMENT_SUCCESS, payload: { commentId, postId } })
+      showAlert("success", "Comment deleted.")
     } catch (error) {
-      dispatch({
-        type: DELETE_COMMENT_ERROR,
-        payload: {
-          msg: error.response.data.msg
-        }
-      })
+      dispatch({ type: DELETE_COMMENT_ERROR })
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -101,13 +101,10 @@ const PostProvider = ({ children }) => {
     try {
       const { data } = await apiFetch.post(`posts/${postId}/comments`, content)
       dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data })
+      showAlert("success", "Comment created.")
     } catch (error) {
-      dispatch({
-        type: CREATE_COMMENT_ERROR,
-        payload: {
-          msg: error.response.data.msg
-        }
-      })
+      dispatch({ type: CREATE_COMMENT_ERROR })
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -115,8 +112,10 @@ const PostProvider = ({ children }) => {
     try {
       await apiFetch.patch(`/posts/${id}/${endPoint}`);
       dispatch({ type: LIKE_POST, payload: { id, userId, endPoint } })
+      const msg = endPoint === "like" ? "You liked the post." : "You unliked the post"
+      showAlert("success", msg)
     } catch (error) {
-      console.log(error.response);
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -129,9 +128,8 @@ const PostProvider = ({ children }) => {
         payload: data,
       });
     } catch (error) {
-      dispatch({
-        type: GET_POSTS_ERROR,
-      })
+      dispatch({ type: GET_POSTS_ERROR })
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -145,9 +143,8 @@ const PostProvider = ({ children }) => {
         payload: data,
       });
     } catch (error) {
-      dispatch({
-        type: GET_USER_POSTS_ERROR,
-      })
+      dispatch({ type: GET_USER_POSTS_ERROR })
+      showAlert("danger", error.response.data.msg)
     }
   }
 
@@ -163,20 +160,16 @@ const PostProvider = ({ children }) => {
     };
   }, []);
 
-
   const createPost = async (post) => {
     dispatch({ type: CREATE_POST_BEGIN })
     try {
       const { data } = await apiFetch.post('/posts', post);
-      dispatch({
-        type: CREATE_POST_SUCCESS,
-        payload: data,
-      });
+      dispatch({ type: CREATE_POST_SUCCESS, payload: data });
+      showAlert("success", "Post created.")
     } catch (error) {
-      dispatch({
-        type: CREATE_POST_ERROR,
-      })
-      console.log(error.response);
+      dispatch({ type: CREATE_POST_ERROR })
+      showAlert("danger", error.response.data.msg)
+
     }
   }
 

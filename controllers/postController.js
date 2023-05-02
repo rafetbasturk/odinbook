@@ -28,11 +28,16 @@ exports.getAllPosts = async (req, res) => {
   else {
     const user = await User.findById(req.user.userId)
 
-    query = {
-      $or: [
-        { author: req.user.userId },
-        { author: { $in: user.friends } }
-      ]
+    if (user.friends.length === 0) {
+      query = {}
+    }
+    else {
+      query = {
+        $or: [
+          { author: req.user.userId },
+          { author: { $in: user.friends } }
+        ]
+      }
     }
   }
 
@@ -138,7 +143,7 @@ exports.createPostComment = async (req, res) => {
     path: "author comments",
   })
 
-  res.status(StatusCodes.OK).json({
+  res.status(StatusCodes.CREATED).json({
     post
   })
 }
@@ -175,5 +180,4 @@ exports.unlike = async (req, res) => {
   res.status(200).json({
     msg: "You unliked the post!"
   })
-
 }

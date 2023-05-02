@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { MdEmail, MdRemoveRedEye } from "react-icons/md"
+import { MdEmail, MdRemoveRedEye, MdCloudUpload } from "react-icons/md"
 
 const InputElement = ({ type, name, value, handleChange, labelText }) => {
   const [elementType, setElementType] = useState(type)
@@ -12,7 +12,7 @@ const InputElement = ({ type, name, value, handleChange, labelText }) => {
   return (
     <div className='input-container'>
       <label htmlFor={name} className='label'>
-        {labelText || name}
+        {type === "file" ? <span className="label-span"><MdCloudUpload /> Select Image</span> : labelText || name}
         <input
           type={elementType}
           value={value}

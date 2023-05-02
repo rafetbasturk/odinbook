@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { initialState } from "../post-context";
 import {
   GET_POSTS_BEGIN,

@@ -1,11 +1,18 @@
+import { DateTime } from "luxon";
 import { useState } from "react";
 import useUserContext from "../hooks/useUserContext";
-import { InputElement, Loading, ProfileImage } from "../components";
-import { UserPageWrapper } from "../assets/wrappers";
+import { InputElement, ProfileImage } from "../components";
+import { ProfileWrapper } from "../assets/wrappers";
+import useAlert from "../hooks/useAlertContext";
 
 const Profile = () => {
-  const { uploadImage, currentUser, userLoading } = useUserContext();
+  const { uploadImage, currentUser } = useUserContext();
   const [file, setFile] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const { showAlert } = useAlert();
+
+  const date = DateTime.fromISO(currentUser.createdAt).toFormat('dd LLLL yyyy')
+
 
   const handleChange = e => {
     setFile(e.target.files[0]);
@@ -13,28 +20,43 @@ const Profile = () => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file) return
+    if (!file) {
+      showAlert("danger", "Please select an image to upload!")
+      return
+    }
     const formData = new FormData();
     formData.append('image', file);
     uploadImage(formData);
   }
 
   return (
-    <UserPageWrapper>
+    <ProfileWrapper>
       <h2>Profile</h2>
-      {userLoading && <Loading />}
-      {!userLoading && <ProfileImage image={currentUser?.image} alt={currentUser.name} />}
-      <div>{currentUser?.email}</div>
-      <form onSubmit={handleUpload}>
-        <input type="file" name="image" id="image" onChange={handleChange} accept="image/*" />
-        {/* <InputElement 
-          type="file"
-          name="image"
-          id="image"
-        /> */}
-        <button type="submit">Upload</button>
-      </form>
-    </UserPageWrapper>
+      <div className="container">
+        <div className="image-upload" >
+          <ProfileImage image={currentUser?.image} alt={currentUser.name} />
+          {!showForm && <button type="button" className="btn" onClick={() => setShowForm(true)}>Upload new photo</button>}
+          {showForm && <form onSubmit={handleUpload} className="file-form">
+            <InputElement
+              type="file"
+              name="image"
+              id="image"
+              handleChange={handleChange}
+              className="custom-file-upload"
+            />
+            <button type="submit" className="btn">Upload</button>
+          </form>}
+        </div>
+        <div className="info">
+          <h3>Profile Information</h3>
+          <div>
+            <p>Name: {currentUser?.name}</p>
+            <p>Email: {currentUser?.email}</p>
+            <p>Member since: {date}</p>
+          </div>
+        </div>
+      </div>
+    </ProfileWrapper>
   )
 }
 export default Profile

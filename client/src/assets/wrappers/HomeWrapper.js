@@ -15,6 +15,7 @@ const HomeWrapper = styled.main`
     border-radius: var(--size-xxs);
     box-shadow: 0 0 1px 1px var(--tint-70);
     background: var(--tint-100);
+    word-break: break-all;
   }
 
   .post-form a {
@@ -182,6 +183,7 @@ const HomeWrapper = styled.main`
   .comment {
     display: grid;
     grid-template-columns: 32px 1fr 40px;
+    grid-template-rows: auto;
     gap: var(--size-xs);
     position: relative;
   }
@@ -189,12 +191,6 @@ const HomeWrapper = styled.main`
   .comment a {
     padding: 0;
     background: transparent;
-  }
-
-  .comment-content-container {
-    border-radius: var(--size-m);
-    width: fit-content;
-    text-align: justify;
   }
 
   .comment-content {
@@ -216,11 +212,10 @@ const HomeWrapper = styled.main`
   }
 
   .comment-post {
-    line-height: var(--size-m);
+    line-height: var(--size-ml);
   }
 
   .comment-menu {
-    align-self: center;
     display: grid;
     place-items: center;
     width: 40px;

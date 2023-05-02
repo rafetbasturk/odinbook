@@ -1,17 +1,15 @@
 const { Router } = require("express");
 const passport = require("passport");
-const { register, login, logout, getCurrentUser, callback, headers } = require("../controllers/authController");
+const { register, login, logout, getCurrentUser, callback } = require("../controllers/authController");
 const { authenticateUser } = require("../middlewares/authenticateUser");
 
-const router = Router()
+const router = Router();
 
-router.route("/register").post(register)
-router.route("/login").post(login)
-router.route("/logout").get(logout)
-router.route("/getCurrentUser").get(authenticateUser, getCurrentUser)
-router.route("/facebook")
-  .get(passport.authenticate('facebook', { scope: ['email'] }))
-router.route("/facebook/callback")
-  .get(passport.authenticate('facebook', { session: false }), callback)
+router.route("/register").post(register);
+router.route("/login").post(login);
+router.route("/logout").get(logout);
+router.route("/getCurrentUser").get(authenticateUser, getCurrentUser);
+router.route("/facebook").get(passport.authenticate('facebook'));
+router.route("/facebook/callback").get(passport.authenticate('facebook'), callback);
 
-module.exports = router
+module.exports = router;
